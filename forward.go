@@ -23,14 +23,16 @@ func forwardPort(source, dest string) {
 		os.Exit(0)
 	}
 
+	fmt.Println(fmt.Sprintf("start forward traffic from %s to %s.", source, dest))
+
 	for {
 		sConn, err := l.Accept()
 		if err != nil {
 			continue
 		}
 
-		d_tcpAddr, _ := net.ResolveTCPAddr("tcp4", dest)
-		dConn, err := net.DialTCP("tcp", nil, d_tcpAddr)
+		dTcpAddr, _ := net.ResolveTCPAddr("tcp4", dest)
+		dConn, err := net.DialTCP("tcp", nil, dTcpAddr)
 		if err != nil {
 			fmt.Println(err)
 			sConn.Write([]byte(fmt.Sprintf("can't connect %s", dest)))
@@ -40,4 +42,6 @@ func forwardPort(source, dest string) {
 		go io.Copy(sConn, dConn)
 		go io.Copy(dConn, sConn)
 	}
+
+	fmt.Println("quit port forward.")
 }

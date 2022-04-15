@@ -1,3 +1,3 @@
-module portforward
+module nutportforward
 
 go 1.15
